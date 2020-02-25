@@ -4,16 +4,26 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.r0rtiz2.otahandler.R;
@@ -61,8 +71,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        /* Check if pm hide method is enabled */
+
+        SharedPreferences settings = getSharedPreferences("OTAHandler_pmhide", 0);
+        boolean hide_method = settings.getBoolean("pm_hide_method", false);
+
+        if(hide_method) {
+            Log.i("OTAHandler", "***USE PM-HIDE METHOD***");
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+
         Context context = getApplicationContext();
         boolean enabled = isAccessibilityEnabled();
         TextView tv1 = (TextView)findViewById(R.id.textView1);
@@ -86,5 +108,31 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, 0);
             }
         });
+
     }
+
+    /* 3-dot MENU */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.settings:
+                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                break;
+            case R.id.source_code:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/R0rt1z2/OTAHandler"));
+                startActivity(browserIntent);
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }
+

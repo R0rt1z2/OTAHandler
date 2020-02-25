@@ -51,6 +51,7 @@ public class OtaHandlerService extends AccessibilityService {
                 am.killBackgroundProcesses("com.amazon.settings.systemupdates");
                 am.killBackgroundProcesses("com.amazon.device.software.ota");
                 am.killBackgroundProcesses("com.amazon.kindle.otter.oobe.forced.ota");
+
                 if (main_app.contains("systemupdates") || main_app.contains("forced.ota") || main_app.contains("device.software.ota")) {
                     Log.i("OTAHandler", "Recieved OTA as main activity. Go back.");
                     performGlobalAction(GLOBAL_ACTION_BACK);
