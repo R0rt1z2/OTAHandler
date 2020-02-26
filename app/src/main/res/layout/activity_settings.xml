@@ -46,7 +46,7 @@
             android:layout_height="match_parent"
             android:textSize="14dp"
             android:gravity="center_vertical"
-            android:text="Use pm hide method"/>
+            android:text="Install unifiedsharefacebook helper"/>
     <Switch
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

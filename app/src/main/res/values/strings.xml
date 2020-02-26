@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">OTAHandler</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="update_app_url">https://github.com/R0rt1z2/OTAHandler/raw/master/helper/com.amazon.unifiedsharefacebook.apk</string>
+    <string name="notification_description">Downloading the helper...</string>
 
     <!-- Preference Titles -->
     <string name="misc_header">Misc</string>

@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         TextUtils.SimpleStringSplitter mStringColonSplitter = new TextUtils.SimpleStringSplitter(':');
 
         if (accessibilityEnabled==1) {
-            Log.d("OTAHandler", "***ACCESSIBILIY IS ENABLED***: ");
+            Log.d("OTAHandler", "***ACCESSIBILITY IS ENABLED***: ");
 
             String settingValue = Settings.Secure.getString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
             Log.d("OTAHandler", "Setting: " + settingValue);
@@ -68,9 +68,10 @@ public class MainActivity extends AppCompatActivity {
         return accessibilityFound;
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
 
         /* Check if pm hide method is enabled */
 
@@ -80,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
         if(hide_method) {
             Log.i("OTAHandler", "***USE PM-HIDE METHOD***");
         }
+
+        /* Check if pm hide method is enabled */
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -111,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /* 3-dot MENU */
+    /* Init the 3-dot MENU */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater=getMenuInflater();
