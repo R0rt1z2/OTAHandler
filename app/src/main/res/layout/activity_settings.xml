@@ -56,4 +56,27 @@
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="64dp"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="14dp"
+            android:gravity="center_vertical"
+            android:text="Activity logging in logcat"/>
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/switch3"
+            android:gravity="center_vertical"
+            android:text="Logging disabled"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
 </LinearLayout>

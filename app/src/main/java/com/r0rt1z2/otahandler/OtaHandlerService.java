@@ -8,12 +8,17 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
 import android.os.Process;
 import android.view.accessibility.AccessibilityEvent;
+import android.widget.Toast;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class OtaHandlerService extends AccessibilityService {
 
@@ -42,10 +47,15 @@ public class OtaHandlerService extends AccessibilityService {
                         event.getClassName().toString()
                 );
 
+                Context context = getApplicationContext();
+
                 ActivityInfo activityInfo = tryGetActivity(componentName);
                 boolean isActivity = activityInfo != null;
-                if (isActivity)
-                    Log.i("OTAHandler", componentName.flattenToShortString());
+                SharedPreferences settings = getSharedPreferences("OTAHandler", 0);
+                boolean logging = settings.getBoolean("logging", false);
+
+                if (isActivity && logging)
+                    Log.i("OTAHandler", "Main activity seems to be: " + componentName.flattenToShortString());
                 String main_app = componentName.flattenToShortString();
                 ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
                 am.killBackgroundProcesses("com.amazon.settings.systemupdates");
@@ -54,6 +64,7 @@ public class OtaHandlerService extends AccessibilityService {
 
                 if (main_app.contains("systemupdates") || main_app.contains("forced.ota") || main_app.contains("device.software.ota")) {
                     Log.i("OTAHandler", "Recieved OTA as main activity. Go back.");
+                    Toast.makeText(OtaHandlerService.this, "Trying to spawn OTA app?", Toast.LENGTH_SHORT).show();
                     performGlobalAction(GLOBAL_ACTION_BACK);
                 }
             }

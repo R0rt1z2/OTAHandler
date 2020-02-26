@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("OTAHandler", "Setting: " + settingValue);
             if (settingValue != null) {
                 if (settingValue.contains("r0rt1z2")){
-                     Log.d("OTAHandler", "We've found the correct setting - accessibility is switched on!");
+                     Log.d("OTAHandler", "Haman! We've found the correct setting: Accessibility Service is enabled!");
                      return true;
                 }
             }
@@ -70,20 +70,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
-
-        /* Check if pm hide method is enabled */
-
-        SharedPreferences settings = getSharedPreferences("OTAHandler_pmhide", 0);
-        boolean hide_method = settings.getBoolean("pm_hide_method", false);
-
-        if(hide_method) {
-            Log.i("OTAHandler", "***USE PM-HIDE METHOD***");
-        }
-
-        /* Check if pm hide method is enabled */
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);

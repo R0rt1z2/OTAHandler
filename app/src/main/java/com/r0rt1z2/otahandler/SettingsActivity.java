@@ -59,9 +59,30 @@ public class SettingsActivity extends AppCompatActivity {
 
         final Switch hide = (Switch) findViewById(R.id.switch1);
         final Switch pmhide = (Switch) findViewById(R.id.switch2);
+        final Switch logging = (Switch) findViewById(R.id.switch3);
 
         //SharedPreferences settings = getSharedPreferences("OTAHandler", 0);
         //boolean helper_installed = settings.getBoolean("helper_installed", false);
+
+
+        //if(logging.isChecked()) {
+         //   SharedPreferences settings = getSharedPreferences("OTAHandler", 0);
+         //   SharedPreferences.Editor editor = settings.edit();
+         //   editor.putBoolean("logging", true);
+         //   editor.commit();
+         //   logging.setText("Logging enabled");
+        //}
+
+        SharedPreferences settings = getSharedPreferences("OTAHandler", 0);
+        boolean logging_enabled = settings.getBoolean("logging", false);
+
+        if(logging_enabled) {
+            logging.setText("Logging enabled");
+            logging.setChecked(true);
+        } else {
+            logging.setText("Logging Disabled");
+            logging.setChecked(false);
+        }
 
         /* Check FireOS Version */
         String fos_ver = getSystemProperty("ro.build.version.fireos");
@@ -121,6 +142,71 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        logging.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.i("OTAHandler", "onCheckedChanged: " + isChecked);
+                if (isChecked) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+                    builder.setTitle("Warning");
+                    builder.setMessage("This will enable the OTAHandler service that shows what is the main activity in logcat. Are you sure?");
+                    builder.setCancelable(true);
+                    builder.setPositiveButton("Ok",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    SharedPreferences settings = getSharedPreferences("OTAHandler", 0);
+                                    SharedPreferences.Editor editor = settings.edit();
+                                    editor.putBoolean("logging", true);
+                                    editor.commit();
+                                    logging.setText("Logging enabled");
+                                    dialog.cancel();
+                                }
+                    });
+
+                    builder.setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                logging.setText("Logging disabled");
+                                Log.i("OTAHandler", "Clicked Cancel!");
+                                dialog.cancel();
+                            }
+                        });
+
+                    AlertDialog alert11 = builder.create();
+                    alert11.show();
+
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+                    builder.setTitle("Warning");
+                    builder.setMessage("This will disable the OTAHandler service that shows what is the main activity in logcat. Are you sure?");
+                    builder.setCancelable(true);
+                    builder.setPositiveButton("Ok",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    SharedPreferences settings = getSharedPreferences("OTAHandler", 0);
+                                    SharedPreferences.Editor editor = settings.edit();
+                                    editor.putBoolean("logging", false);
+                                    editor.commit();
+                                    logging.setText("Logging disabled");
+                                    dialog.cancel();
+                                }
+                            });
+
+                    builder.setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    Log.i("OTAHandler", "Clicked Cancel!");
+                                    logging.setText("Logging enabled");
+                                    dialog.cancel();
+                                }
+                            });
+
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+            }
+        });
+
         pmhide.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -139,11 +225,6 @@ public class SettingsActivity extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int id) {
                                     Log.i("OTAHandler", "Clicked OK!");
                                     DownloadManager downloadmanager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-                                    File helper = new File(Environment.DIRECTORY_DOWNLOADS + "/helper.apk");
-                                    if(helper.exists()) {
-                                        Toast.makeText(SettingsActivity.this, "Deleting old apk...", Toast.LENGTH_SHORT).show();
-                                        helper.delete();
-                                    }
                                     Uri uri = Uri.parse("https://github.com/R0rt1z2/OTAHandler/raw/master/helper/com.amazon.unifiedsharefacebook.apk");
                                     final DownloadManager.Request request = new DownloadManager.Request(uri);
                                     request.setTitle("com.amazon.unifiedsharefacebook");
@@ -163,6 +244,7 @@ public class SettingsActivity extends AppCompatActivity {
                     builder1.setNegativeButton("Cancel",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
+                                    pmhide.setText("Not installed");
                                     Log.i("OTAHandler", "Clicked Cancel!");
                                     dialog.cancel();
                                 }
@@ -220,6 +302,7 @@ public class SettingsActivity extends AppCompatActivity {
         return value;
     }
     /* Used to get system props, basically like getprop */
+
 }
 
 
